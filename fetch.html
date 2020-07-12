@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<button id="get_btn" type="button">GetUserList</button>
+	<div id="get_userlist"></div>
+	<div id="get_result"></div>
+	<br>
+	<br>
+	<form id="post_form">
+		<input type="json" name="username" placeholder="input name"><br>
+		<input type="email" name="email" placeholder="input email"><br>
+		<button id="post_btn" type="button">PostUser</button>
+	</form>
+	<div id="post_result"></div>
+	<script>
+		const url = "http://127.0.0.1:8000/users/"
+		const userList = document.getElementById("get_userlist")
+		const getResult = document.getElementById("get_result")
+		const postResult = document.getElementById("post_result")
+
+		document.getElementById("get_btn")
+			.addEventListener("click", () => {
+				clearText()
+				const init = {method: "get"}
+				fetch(url, init)
+				.then(response => {
+					if (response.ok){
+						return response.json()
+					} else {
+						throw Error()
+					}
+				})
+				.then(data => {
+					getResult.textContent = "成功しました"
+					console.log(data)
+					for(const user of data.results){
+						userList.innerHTML += `${user.username} ${user.email} <br>` 
+					}
+				})
+				.catch(error => {
+					console.log(error)
+					getResult.textContent = "失敗しました"
+				})
+			})
+
+
+		document.getElementById("post_btn")
+			.addEventListener("click", () => {
+				clearText()
+				const form = new FormData(document.forms.post_form)
+				const postResult = document.getElementById("post_result")
+				const init = {method: "post", body: form}
+				
+				fetch(url, init)
+					.then(response => {
+						if (response.ok){
+							return response.json()
+						} else {
+							throw Error()
+						}
+					})
+					.then (data => {
+						console.log(data)
+						postResult.textContent = "成功しました"
+					})
+					.catch (error => {
+						console.log(error)
+						postResult.textContent = "失敗しました"
+					})
+			})
+
+		const clearText = () => {
+			userList.textContent = ""
+			getResult.textContent = ""
+			postResult.textContent = ""
+		}
+		
+	</script>
+</body>
+</html>
