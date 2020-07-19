@@ -6,13 +6,13 @@
 	<title>Document</title>
 </head>
 <body>
-	<button id="get_btn" type="button">GetUserList</button>
+	<button id="get_btn" type="submit">GetUserList</button>
 	<div id="get_userlist"></div>
 	<div id="get_result"></div>
 	<br>
 	<br>
 	<form id="post_form">
-		<input type="json" name="username" placeholder="input name"><br>
+		<input type="text" name="username" placeholder="input name"><br>
 		<input type="email" name="email" placeholder="input email"><br>
 		<button id="post_btn" type="button">PostUser</button>
 	</form>
@@ -27,6 +27,7 @@
 			.addEventListener("click", () => {
 				clearText();
 				const init = {method: "get"};
+
 				fetch(url, init)
 				.then(response => {
 					if (response.ok){
@@ -36,8 +37,8 @@
 					}
 				})
 				.then(data => {
-					getResult.textContent = "成功しました";
 					console.log(data);
+					getResult.textContent = "成功しました";
 					for(const user of data.results){
 						const div = document.createElement('div');
 						div.textContent = `${user.username} ${user.email}`;
@@ -59,21 +60,21 @@
 				const init = {method: "post", body: form};
 				
 				fetch(url, init)
-					.then(response => {
-						if (response.ok){
-							return response.json();
-						} else {
-							throw Error();
-						}
-					})
-					.then (data => {
-						console.log(data);
-						postResult.textContent = "成功しました";
-					})
-					.catch (error => {
-						console.log(error);
-						postResult.textContent = "失敗しました";
-					})
+				.then(response => {
+					if (response.ok){
+						return response.json();
+					} else {
+						throw Error();
+					}
+				})
+				.then (data => {
+					console.log(data);
+					postResult.textContent = "成功しました";
+				})
+				.catch (error => {
+					console.log(error);
+					postResult.textContent = "失敗しました";
+				})
 			})
 
 		const clearText = () => {
